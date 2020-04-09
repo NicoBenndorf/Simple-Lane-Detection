@@ -27,22 +27,32 @@ The goals / steps of this project are the following:
 
 ### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-My pipeline consisted of 8 steps. First, I loaded the input imag. As next step I converted the images to grayscale. Third, I filtered the image by intensity with the inRange function to filter out pixels that are definetely to dark for being lane markings. The fourth step was setting a region of interest along the area of the image where the lane markings of our lane can be. 
-As the fifth step, I used the provided canny() function to detect the edges of the lane markings. 
-To improve the output of the canny edge detection I applied a gaussian blur of kernsel size 3 to strengthen the edges.
-After the edge detection I used the hough transform for finding lines. For this sixth step I adapted the hough_lines() function and added the lines as a return value. 
-In order to draw a single line on the left and right lanes, I used the draw_lines() function within my own extrapolate_lanes_image() function as the seventh step. This function orchestrates the call of some other functions that first seperate the left from the right lines. Next I call my extrapolate_lines() function seperately on the left and then the right lines. For extrapolating the lines I calculate the average slope, the average y-Axis intersection and with that the average intersection with my set ROI boundarys. With these average values and the roi intersections for the left and the right lane I use the draw_lines function to draw one single extrapolated line for each lane.
-Last but not least in step eigth, I use the weighted_img() function to add my annotated lanes to the original image.
+My pipeline consisted of 8 steps:
 
-If you'd like to include images to show how the pipeline works, here is how to include an image: 
+First, I loaded the input imag. 
 
+As next step I converted the images to grayscale. 
 ![alt text][image2]
+Third, I filtered the image by intensity with the inRange function to filter out pixels that are definetely to dark for being lane markings. 
 ![alt text][image3]
+
+The fourth step was setting a region of interest along the area of the image where the lane markings of our lane can be. 
 ![alt text][image4]
+
+As the fifth step, I used the provided canny() function to detect the edges of the lane markings. 
 ![alt text][image5]
+
+To improve the output of the canny edge detection I applied a gaussian blur of kernsel size 3 to strengthen the edges.
+After the edge detection I used the hough transform for finding lines. 
 ![alt text][image6]
+
+For this sixth step I adapted the hough_lines() function and added the lines as a return value. 
 ![alt text][image7.0]
+
+In order to draw a single line on the left and right lanes, I used the draw_lines() function within my own extrapolate_lanes_image() function as the seventh step. This function orchestrates the call of some other functions that first seperate the left from the right lines. Next I call my extrapolate_lines() function seperately on the left and then the right lines. For extrapolating the lines I calculate the average slope, the average y-Axis intersection and with that the average intersection with my set ROI boundarys. With these average values and the roi intersections for the left and the right lane I use the draw_lines function to draw one single extrapolated line for each lane.
 ![alt text][image7.1]
+
+Last but not least in step eigth, I use the weighted_img() function to add my annotated lanes to the original image.
 ![alt text][image8]
 
 
