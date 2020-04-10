@@ -59,7 +59,6 @@ Last but not least in step eigth, I use the weighted_img() function to add my an
 
 
 ### 2. Identify potential shortcomings with your current pipeline
-extrapolate to ROI hardcoded, flickering extrapolation/lanes, not scaling to different image resolutions and camera angle/view
 
 One potential shortcoming would be what would happen when the input image is of a different size. The region of interest would cut out the wrong part of the image, as my pipeline does not scale the roi. The same thing applies if the camera would be mounted in a differen angle or position.
 
