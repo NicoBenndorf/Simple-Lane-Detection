@@ -1,56 +1,72 @@
 # **Finding Lane Lines on the Road** 
-[![Udacity - Self-Driving Car NanoDegree](https://s3.amazonaws.com/udacity-sdc/github/shield-carnd.svg)](http://www.udacity.com/drive)
 
-<img src="examples/laneLines_thirdPass.jpg" width="480" alt="Combined Image" />
+## Writeup Template
 
-Overview
 ---
 
-When we drive, we use our eyes to decide where to go.  The lines on the road that show us where the lanes are act as our constant reference for where to steer the vehicle.  Naturally, one of the first things we would like to do in developing a self-driving car is to automatically detect lane lines using an algorithm.
+**Finding Lane Lines on the Road**
 
-In this project you will detect lane lines in images using Python and OpenCV.  OpenCV means "Open-Source Computer Vision", which is a package that has many useful tools for analyzing images.  
-
-To complete the project, two files will be submitted: a file containing project code and a file containing a brief write up explaining your solution. We have included template files to be used both for the [code](https://github.com/udacity/CarND-LaneLines-P1/blob/master/P1.ipynb) and the [writeup](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md).The code file is called P1.ipynb and the writeup template is writeup_template.md 
-
-To meet specifications in the project, take a look at the requirements in the [project rubric](https://review.udacity.com/#!/rubrics/322/view)
+The goals / steps of this project are the following:
+* Make a pipeline that finds lane lines on the road
+* Reflect on your work in a written report
 
 
-Creating a Great Writeup
----
-For this project, a great writeup should provide a detailed response to the "Reflection" section of the [project rubric](https://review.udacity.com/#!/rubrics/322/view). There are three parts to the reflection:
+[//]: # (Image References)
 
-1. Describe the pipeline
-
-2. Identify any shortcomings
-
-3. Suggest possible improvements
-
-We encourage using images in your writeup to demonstrate how your pipeline works.  
-
-All that said, please be concise!  We're not looking for you to write a book here: just a brief description.
-
-You're not required to use markdown for your writeup.  If you use another method please just submit a pdf of your writeup. Here is a link to a [writeup template file](https://github.com/udacity/CarND-LaneLines-P1/blob/master/writeup_template.md). 
-
-
-The Project
+[image2]: ./plot_saves/2_grayscale.jpg "Grayscale image"
+[image3]: ./plot_saves/3_gray_select.jpg "Grayscale image filtered by intensity"
+[image4]: ./plot_saves/4_gray_select_roi.jpg "Filtered image reduced to the relevant ROI"
+[image5]: ./plot_saves/5_img_canny.jpg "Image after canny-edge detection"
+[image6]: ./plot_saves/6_canny_blur.jpg "Image after canny-edge detection and blur to strengthen edges"
+[image7.0]: ./plot_saves/7.0_hough.jpg "Unused output image of the hough line transform - to show detected line-segments"
+[image7.1]: ./plot_saves/7.1_lane_img.jpg "Image of extrapolated lines that represent the detected lanes"
+[image8]: ./plot_saves/8_image_annotated.jpg "Original image with annotated lanes"
 ---
 
-## If you have already installed the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) you should be good to go!   If not, you should install the starter kit to get started on this project. ##
+### Reflection
 
-**Step 1:** Set up the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) if you haven't already.
+### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
 
-**Step 2:** Open the code in a Jupyter Notebook
+My pipeline consisted of 8 steps:
 
-You will complete the project code in a Jupyter notebook.  If you are unfamiliar with Jupyter Notebooks, check out [Udacity's free course on Anaconda and Jupyter Notebooks](https://classroom.udacity.com/courses/ud1111) to get started.
+First, I loaded the input imag. 
 
-Jupyter is an Ipython notebook where you can run blocks of code and see results interactively.  All the code for this project is contained in a Jupyter notebook. To start Jupyter in your browser, use terminal to navigate to your project directory and then run the following command at the terminal prompt (be sure you've activated your Python 3 carnd-term1 environment as described in the [CarND Term1 Starter Kit](https://github.com/udacity/CarND-Term1-Starter-Kit/blob/master/README.md) installation instructions!):
+As next step I converted the images to grayscale. 
+![alt text][image2]
+Third, I filtered the image by intensity with the inRange function to filter out pixels that are definetely to dark for being lane markings. 
+![alt text][image3]
 
-`> jupyter notebook`
+The fourth step was setting a region of interest along the area of the image where the lane markings of our lane can be. 
+![alt text][image4]
 
-A browser window will appear showing the contents of the current directory.  Click on the file called "P1.ipynb".  Another browser window will appear displaying the notebook.  Follow the instructions in the notebook to complete the project.  
+As the fifth step, I used the provided canny() function to detect the edges of the lane markings. 
+![alt text][image5]
 
-**Step 3:** Complete the project and submit both the Ipython notebook and the project writeup
+To improve the output of the canny edge detection I applied a gaussian blur of kernsel size 3 to strengthen the edges.
+![alt text][image6]
 
-## How to write a README
-A well written README file can enhance your project and portfolio.  Develop your abilities to create professional README files by completing [this free course](https://www.udacity.com/course/writing-readmes--ud777).
+After the edge detection I used the hough transform for finding lines. 
+This image is displayed just to show the resulting lines defining the lane markings generated with my parameters. I did not use this output image.
+![alt text][image7.0]
+For this sixth step I instead adapted the hough_lines() function and added the lines as a return value. 
 
+In order to draw a single line on the left and right lanes, I used the draw_lines() function within my own extrapolate_lanes_image() function as the seventh step. This function orchestrates the call of some other functions that first seperate the left from the right lines. Next I call my extrapolate_lines() function seperately on the left and then the right lines. For extrapolating the lines I calculate the average slope, the average y-Axis intersection and with that the average intersection with my set ROI boundarys. With these average values and the roi intersections for the left and the right lane I use the draw_lines function to draw one single extrapolated line for each lane.
+![alt text][image7.1]
+
+Last but not least in step eigth, I use the weighted_img() function to add my annotated lanes to the original image.
+![alt text][image8]
+
+
+
+### 2. Identify potential shortcomings with your current pipeline
+
+One potential shortcoming would be what would happen when the input image is of a different size. The region of interest would cut out the wrong part of the image, as my pipeline does not scale the roi. The same thing applies if the camera would be mounted in a differen angle or position.
+
+Another shortcoming is that in between some frames the extrapolated lanes vary quite a bit, especially on the side of the dottet lane markings (the ones to seperate different lanes). This results in flickering of the extrapolated lanes, even they are still quite accurate closer to the car, which could lead to instability if one would apply a steering controller based on this lane detection. Also in very few of the frames, the left line is not detected and instead a vertical bar out of the roi ist detected.
+
+
+### 3. Suggest possible improvements to your pipeline
+
+A possible improvement would be to implement scaling of the ROI depending on the input picture dimensions. As the ROI is defined by a Polygon, but for the lane extrapolation hardcoded values are used it would be better to acutally calculate the intersection of the lanes and the ROI Polygon.
+
+Another potential improvement could be to further optimize the parameterization to extrapolate more stable lines. This could for example be implemented with averaging the detected lines over time - or in this case frames.
