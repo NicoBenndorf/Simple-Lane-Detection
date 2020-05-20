@@ -2,6 +2,7 @@
 
 [//]: # (Image References)
 
+[image1]: ./plot_saves/1_image.jpg "Input image"
 [image2]: ./plot_saves/2_grayscale.jpg "Grayscale image"
 [image3]: ./plot_saves/3_gray_select.jpg "Grayscale image filtered by intensity"
 [image4]: ./plot_saves/4_gray_select_roi.jpg "Filtered image reduced to the relevant ROI"
@@ -18,6 +19,7 @@
 My pipeline consists of 8 steps:
 
 First, I loaded the input imag. 
+![alt text][image1]
 
 As next step I converted the images to grayscale. 
 ![alt text][image2]
