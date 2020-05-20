@@ -1,15 +1,4 @@
-# **Finding Lane Lines on the Road** 
-
-## Writeup Template
-
----
-
-**Finding Lane Lines on the Road**
-
-The goals / steps of this project are the following:
-* Make a pipeline that finds lane lines on the road
-* Reflect on your work in a written report
-
+# **Finding lane lines on the road - a simple lane detection pipeline** 
 
 [//]: # (Image References)
 
@@ -23,16 +12,16 @@ The goals / steps of this project are the following:
 [image8]: ./plot_saves/8_image_annotated.jpg "Original image with annotated lanes"
 ---
 
-### Reflection
 
-### 1. Describe your pipeline. As part of the description, explain how you modified the draw_lines() function.
+### 1. Pipeline processing step by step
 
-My pipeline consisted of 8 steps:
+My pipeline consists of 8 steps:
 
 First, I loaded the input imag. 
 
 As next step I converted the images to grayscale. 
 ![alt text][image2]
+
 Third, I filtered the image by intensity with the inRange function to filter out pixels that are definetely to dark for being lane markings. 
 ![alt text][image3]
 
@@ -58,14 +47,14 @@ Last but not least in step eigth, I use the weighted_img() function to add my an
 
 
 
-### 2. Identify potential shortcomings with your current pipeline
+### 2. Potential shortcomings with the current pipeline
 
 One potential shortcoming would be what would happen when the input image is of a different size. The region of interest would cut out the wrong part of the image, as my pipeline does not scale the roi. The same thing applies if the camera would be mounted in a differen angle or position.
 
 Another shortcoming is that in between some frames the extrapolated lanes vary quite a bit, especially on the side of the dottet lane markings (the ones to seperate different lanes). This results in flickering of the extrapolated lanes, even they are still quite accurate closer to the car, which could lead to instability if one would apply a steering controller based on this lane detection. Also in very few of the frames, the left line is not detected and instead a vertical bar out of the roi ist detected.
 
 
-### 3. Suggest possible improvements to your pipeline
+### 3. Possible improvements to the pipeline
 
 A possible improvement would be to implement scaling of the ROI depending on the input picture dimensions. As the ROI is defined by a Polygon, but for the lane extrapolation hardcoded values are used it would be better to acutally calculate the intersection of the lanes and the ROI Polygon.
 
